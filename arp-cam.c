@@ -39,6 +39,8 @@
 /* ioctl commands */
 #define SET_ANGLE      0
 #define SET_HDMI_ANGLE 1
+#define SET_MS_SINCE_UI_START 2
+#define SET_DASHBOARD_TELLTALES 3
 
 #define NUM_DESCRIPTORS 8
 
@@ -67,16 +69,18 @@ struct std_dma_desc {
 
 
 /* BAR0 Register map */
-#define PREFETCH_BASE      0x2000
-#define PREFETCH_CTRL      0x2080
-#define PREFETCH_NEXT_LO   0x2084
-#define PREFETCH_NEXT_HI   0x2088
-#define PREFETCH_POLL_FREQ 0x208c
-#define PREFETCH_STATUS    0x2090
-#define DISPATCH_STATUS    0x20a0
-#define DISPATCH_CTRL      0x20a4
-#define CAMERA_IRQ_ACK     0x2900
-#define HDMI_ANGLE         0x2c00
+#define PREFETCH_BASE       0x2000
+#define PREFETCH_CTRL       0x2080
+#define PREFETCH_NEXT_LO    0x2084
+#define PREFETCH_NEXT_HI    0x2088
+#define PREFETCH_POLL_FREQ  0x208c
+#define PREFETCH_STATUS     0x2090
+#define DISPATCH_STATUS     0x20a0
+#define DISPATCH_CTRL       0x20a4
+#define MS_SINCE_UI_START   0x2400
+#define DASHBOARD_TELLTALES 0x2404
+#define CAMERA_IRQ_ACK      0x2900
+#define HDMI_ANGLE          0x2c00
 
 /* BAR1 Register map */
 
@@ -260,6 +264,12 @@ static long cam_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 		} else {
 			retval = -EINVAL;
 		}
+		break;
+	case SET_MS_SINCE_UI_START:
+		writel(arg, ci->regs_mem + MS_SINCE_UI_START);
+		break;
+	case SET_DASHBOARD_TELLTALES:
+		writel(arg, ci->regs_mem + DASHBOARD_TELLTALES);
 		break;
 	}
 	return retval;

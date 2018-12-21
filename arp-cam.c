@@ -358,7 +358,7 @@ void handle_camera_irq(int camera) {
 		return;
 
 	spin_lock_irqsave(&ci->lock, flags);
-	writel((1 << camera), ci->regs_mem + CAMERA_IRQ_ACK);
+	writel(0xF, ci->regs_mem + CAMERA_IRQ_ACK);//BAND-AID for missed IRQs
 	start_dma_transfer(offsets[camera], ci->dma_addr[camera],
 			   DMA_FRAME_SIZE);
 	spin_unlock_irqrestore(&ci->lock, flags);

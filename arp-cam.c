@@ -42,7 +42,7 @@
 #define SET_MS_SINCE_UI_START 2
 #define SET_DASHBOARD_TELLTALES 3
 
-#define NUM_DESCRIPTORS 8
+#define NUM_DESCRIPTORS 16
 
 /* DMA descriptor definitions */
 struct std_dma_desc {

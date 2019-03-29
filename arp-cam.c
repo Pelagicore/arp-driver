@@ -182,7 +182,7 @@ static int start_dma_transfer(u32 from, u32 to, u32 num_bytes)
 	last = (next+1) % NUM_DESCRIPTORS;
 
 	if(ci->desc_cpu_addr[last].ctrl & DESC_CTRL_HW) {
-		pr_err("No free descriptors available.\n");
+		pr_warn("No free descriptors available.\n");
 		return -1;
 	}
 

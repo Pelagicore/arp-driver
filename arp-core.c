@@ -27,6 +27,7 @@
 #include <linux/mfd/core.h>
 #include <linux/property.h>
 
+
 struct arp_info {
 	struct pci_dev *dev;
 	unsigned int regs_base;
@@ -39,6 +40,29 @@ struct arp_info {
 
 struct arp_info *ai = NULL;
 
+
+#ifdef ARP_ENABLE_CAN
+static struct resource can_resources[] = {
+	{
+		.start = 0x2200,
+		.end = 0x23ff,
+		.flags = IORESOURCE_MEM,
+		.name = "regs",
+	},
+	{
+		.start = 16,
+		.end = 16,
+		.flags = IORESOURCE_IRQ,
+		.name = "irq",
+	},
+};
+
+static struct property_entry can_properties[] = {
+	{},
+};
+#endif
+
+#ifdef ARP_ENABLE_CAMERA
 static struct resource camera_resources[] = {
 	[0] = {
 		.start = 0,
@@ -81,15 +105,26 @@ static struct resource camera_resources[] = {
 static struct property_entry camera_properties[] = {
 	{ },
 };
+#endif
 
 static const struct mfd_cell arp_cells_bar0[] = {
+#ifdef ARP_ENABLE_CAN
+	{
+		.name = "d_can",
+		.of_compatible = "bosch,d_can",
+		.num_resources = ARRAY_SIZE(can_resources),
+		.resources = can_resources,
+		.properties = can_properties,
+	},
+#endif
+#ifdef ARP_ENABLE_CAMERA
 	{
 		.name = "arp-camera",
-		.id = 0,
 		.num_resources = ARRAY_SIZE(camera_resources),
 		.resources = camera_resources,
 		.properties = camera_properties,
 	},
+#endif
 };
 
 static int arp_pci_probe(struct pci_dev *dev,
